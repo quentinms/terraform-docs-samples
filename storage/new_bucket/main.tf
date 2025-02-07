@@ -31,6 +31,23 @@ resource "google_storage_bucket" "static" {
 }
 # [END storage_create_new_bucket_tf]
 
+# [START storage_create_bucket_dual_region_tf]]
+# Create new storage bucket in the EU Dual Region
+resource "random_id" "bucket_prefix" {
+  byte_length = 8
+}
+
+resource "google_storage_bucket" "dual" {
+  name          = "${random_id.bucket_prefix.hex}-new-dual-bucket"
+  location      = "EU"
+  custom_placement_config {
+    data_locations = ["EUROPE-WEST1", "EUROPE-WEST3"]
+  }
+
+  uniform_bucket_level_access = true
+}
+# [END storage_create_bucket_dual_region_tf]
+
 # [START storage_upload_object_tf]
 # Create a text object in Cloud Storage
 resource "google_storage_bucket_object" "default" {
